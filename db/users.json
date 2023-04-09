@@ -1,0 +1,16 @@
+[
+  {
+    "id": "04ad8943-4532-44b7-8a8f-a1e75b034fd3",
+    "firstName": "Cristobal",
+    "lastName": "Dominguez",
+    "email": "cristobal@example.com",
+    "password": "$2b$10$zKM2O4ecue6u341gwV27rOhRqHD.5r0asn7gednS6CIm4fcMVgxC2"
+  },
+  {
+    "id": "d08ecfc9-e709-4e7b-a192-b0ebeb3ed752",
+    "firstName": "Pedro",
+    "lastName": "Pérez",
+    "email": "pedro@example.com",
+    "password": "$2b$10$rltBzAzZP7RPpA747KN1Oeu913MyEhn3Yti2cPyD01uacyork5rfa"
+  }
+]
