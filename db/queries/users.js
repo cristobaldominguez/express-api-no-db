@@ -1,7 +1,6 @@
-import fs from 'fs'
 import crypto from 'crypto'
-import { usersFilePath } from '../../config.js'
 import jsonUsersData from '../users.json' assert { type: 'json' }
+import User from '../Models/User.js'
 
 // User Creation
 function create_user({ firstName, lastName, email, password }) {
@@ -14,7 +13,7 @@ function create_user({ firstName, lastName, email, password }) {
   }
 
   const users = jsonUsersData.concat(user)
-  fs.writeFileSync(usersFilePath, JSON.stringify(users), { encoding: 'utf8', flag: 'w' })
+  User.save(users)
 
   return user
 }

@@ -1,10 +1,9 @@
-import fs from 'fs'
 import crypto from 'crypto'
 import jsonTodosData from '../todos.json' assert { type: 'json' }
 import ValidationError from '../../errors/validation_error.js'
-import { toDosFilePath } from '../../config.js'
 import AccessError from '../../errors/access_error.js'
 import AuthError from '../../errors/auth_error.js'
+import Todo from '../Models/Todo.js'
 
 async function get_todos({ from: user }) {
   return jsonTodosData.filter(todo => todo.userId === user.id)
@@ -26,7 +25,7 @@ async function post_todo({ user, body }) {
   }
 
   const todos = jsonTodosData.concat(todo)
-  fs.writeFileSync(toDosFilePath, JSON.stringify(todos), { encoding: 'utf8', flag: 'w' })
+  Todo.save(todos)
 
   return todo
 }
@@ -50,7 +49,7 @@ async function update_todo({ user, body, params }) {
 
   const index = jsonTodosData.findIndex(todo => todo.id === id)
   jsonTodosData[index] = newTodo
-  fs.writeFileSync(toDosFilePath, JSON.stringify(jsonTodosData), { encoding: 'utf8', flag: 'w' })
+  Todo.save(jsonTodosData)
 
   return newTodo
 }
@@ -62,7 +61,7 @@ async function delete_todo({ user, params }) {
   if (todo.userId !== user.id) throw new AuthError({ message: 'not authorized to delete this task' })
 
   const todos = jsonTodosData.filter(todo => todo.id !== id)
-  fs.writeFileSync(toDosFilePath, JSON.stringify(todos), { encoding: 'utf8', flag: 'w' })
+  Todo.save(todos)
 
   return { deleted: true, id }
 }
