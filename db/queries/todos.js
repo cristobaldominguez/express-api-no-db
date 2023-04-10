@@ -1,11 +1,11 @@
 import crypto from 'crypto'
-import jsonTodosData from '../todos.json' assert { type: 'json' }
 import ValidationError from '../../errors/validation_error.js'
 import AccessError from '../../errors/access_error.js'
 import AuthError from '../../errors/auth_error.js'
 import Todo from '../Models/Todo.js'
 
 async function get_todos({ from: user }) {
+  const jsonTodosData = Todo.getAll()
   return jsonTodosData.filter(todo => todo.userId === user.id)
 }
 
@@ -24,6 +24,7 @@ async function post_todo({ user, body }) {
     userId: user.id
   }
 
+  const jsonTodosData = Todo.getAll()
   const todos = jsonTodosData.concat(todo)
   Todo.save(todos)
 
@@ -34,6 +35,7 @@ async function update_todo({ user, body, params }) {
   const { id } = params
   if (!body.content) throw new ValidationError({ message: 'Content must to be present.', field: 'content' })
 
+  const jsonTodosData = Todo.getAll()
   const todo = jsonTodosData.find(todo => todo.id === id && todo.userId === user.id)
   if (!todo) throw new AccessError({ message: 'ToDo Not Found.', status: 404 })
 
@@ -57,6 +59,7 @@ async function update_todo({ user, body, params }) {
 async function delete_todo({ user, params }) {
   const { id } = params
 
+  const jsonTodosData = Todo.getAll()
   const todo = jsonTodosData.find(todo => todo.id === id)
   if (todo.userId !== user.id) throw new AuthError({ message: 'not authorized to delete this task' })
 

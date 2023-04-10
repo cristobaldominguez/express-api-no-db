@@ -1,5 +1,4 @@
 import crypto from 'crypto'
-import jsonUsersData from '../users.json' assert { type: 'json' }
 import User from '../Models/User.js'
 
 // User Creation
@@ -12,6 +11,7 @@ function create_user({ firstName, lastName, email, password }) {
     password
   }
 
+  const jsonUsersData = User.getAll()
   const users = jsonUsersData.concat(user)
   User.save(users)
 
@@ -19,6 +19,7 @@ function create_user({ firstName, lastName, email, password }) {
 }
 
 function get_user_by(obj) {
+  const jsonUsersData = User.getAll()
   const user = jsonUsersData.find(usr => Object.keys(obj).every(param => usr[param] === obj[param]))
   if (!user) return null
 
