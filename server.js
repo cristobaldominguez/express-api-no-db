@@ -21,6 +21,7 @@ import setContentType from './middlewares/set_content_type.js'
 
 // Helpers
 import { non_existent_route } from './helpers/non_existent_route.js'
+import checkValidJSON from './middlewares/check_valid_JSON_middleware.js'
 
 // dotEnv Config
 dotenv.config()
@@ -33,6 +34,9 @@ app.use(cors())
 // body-parser -> From Express 4.16+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+
+// Check JSON Formatting
+app.use(checkValidJSON)
 
 // express-sanitizer middleware
 app.use(expressSanitizer())
