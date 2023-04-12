@@ -44,7 +44,7 @@ async function post_signup(req) {
     return generate_token({ user: saved_user })
 
   } catch (err) {
-    if (err.is_an_error) return req.error = err
+    if (err.is_an_error) return err
 
     return new CustomError()
   }
@@ -94,10 +94,11 @@ function authenticate(req, res, next) {
 }
 
 function set_user(req, _, next) {
-  if (!req.token) return req.user = null
+  req.user = null
+  if (!req.token) return 
 
   jwt.verify(req.token, accessTokenSecret, (err, user) => {
-    if (err) return req.user = null
+    if (err) return
 
     req.user = user
     next()
