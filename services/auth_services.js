@@ -9,11 +9,10 @@ import AuthError from '../errors/auth_error.js'
 import CustomError from '../errors/custom_error.js'
 
 // Import Config
-import { email_regex } from '../config.js'
+import { email_regex, expirationToken } from '../config.js'
 
 // DotEnv
 const accessTokenSecret = process.env.SECRET_KEY
-
 if (!accessTokenSecret) console.error('Error: No SECRET_KEY inside .env file')
 
 // POST /auth/signup
@@ -110,14 +109,17 @@ function get_token_from_jwt(bearer) {
 }
 
 function generate_token({ user }) {
-  const token = jwt.sign(user, accessTokenSecret)
+  const filteredUser = {
+    id: user.id,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName
+  }
+
+  const token = jwt.sign(filteredUser, accessTokenSecret, { expiresIn: expirationToken })
+
   return {
-    user: {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName
-    },
+    user: filteredUser,
     accessToken: token
   }
 }

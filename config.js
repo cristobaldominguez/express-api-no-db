@@ -16,6 +16,9 @@ const redirect = {
   for_unauthorized: '/auth/login'
 }
 
+// with 24 hour of token expiration
+const expirationToken = '24h'
+
 const port = process.env.PORT || 3000
 const root = dirname(fileURLToPath(import.meta.url))
 
@@ -28,5 +31,6 @@ export {
   redirect,
   email_regex,
   usersFilePath,
-  toDosFilePath
+  toDosFilePath,
+  expirationToken
 }
