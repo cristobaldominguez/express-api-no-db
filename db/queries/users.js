@@ -11,16 +11,12 @@ function create_user({ firstName, lastName, email, password }) {
     password
   }
 
-  const jsonUsersData = User.getAll()
-  const users = jsonUsersData.concat(user)
-  User.save(users)
-
+  User.add(user)
   return user
 }
 
 function get_user_by(obj) {
-  const jsonUsersData = User.getAll()
-  const user = jsonUsersData.find(usr => Object.keys(obj).every(param => usr[param] === obj[param]))
+  const user = User.find(usr => Object.keys(obj).every(param => usr[param] === obj[param]))
   if (!user) return null
 
   return user

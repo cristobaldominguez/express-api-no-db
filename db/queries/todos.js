@@ -6,8 +6,7 @@ import Todo from '../Models/Todo.js'
 import isEmpty from '../../helpers/is_empty.js'
 
 async function get_todos({ from: user }) {
-  const jsonTodosData = Todo.getAll()
-  return jsonTodosData.filter(todo => todo.userId === user.id)
+  return Todo.filter(todo => todo.userId === user.id)
 }
 
 async function post_todo({ user, body }) {
@@ -16,19 +15,17 @@ async function post_todo({ user, body }) {
   const { content } = body
   const done = body.done === undefined ? false : body.done
 
+  const currentDate = Date.now()
   const todo = {
     id: crypto.randomUUID(),
     content,
     done,
-    createdAt: Date.now(),
-    updatedAt: Date.now(),
+    createdAt: currentDate,
+    updatedAt: currentDate,
     userId: user.id
   }
 
-  const jsonTodosData = Todo.getAll()
-  const todos = jsonTodosData.concat(todo)
-  Todo.save(todos)
-
+  Todo.add(todo)
   return todo
 }
 
@@ -36,8 +33,7 @@ async function update_todo({ user, body, params }) {
   const { id } = params
   if (isEmpty(body)) throw new ValidationError({ message: 'To edit this ToDo, you must to provide any content.', field: 'content' })
 
-  const jsonTodosData = Todo.getAll()
-  const todo = jsonTodosData.find(todo => todo.id === id && todo.userId === user.id)
+  const todo = Todo.find(todo => todo.id === id && todo.userId === user.id)
   if (!todo) throw new AccessError({ message: 'ToDo Not Found.', status: 404 })
 
   const content = body.content ?? todo.content
@@ -50,23 +46,17 @@ async function update_todo({ user, body, params }) {
     updatedAt: Date.now()
   }
 
-  const index = jsonTodosData.findIndex(todo => todo.id === id)
-  jsonTodosData[index] = newTodo
-  Todo.save(jsonTodosData)
-
+  Todo.update(newTodo)
   return newTodo
 }
 
 async function delete_todo({ user, params }) {
   const { id } = params
 
-  const jsonTodosData = Todo.getAll()
-  const todo = jsonTodosData.find(todo => todo.id === id)
+  const todo = Todo.find(todo => todo.id === id)
   if (todo.userId !== user.id) throw new AuthError({ message: 'not authorized to delete this task' })
 
-  const todos = jsonTodosData.filter(todo => todo.id !== id)
-  Todo.save(todos)
-
+  Todo.delete(todo)
   return { deleted: true, id }
 }
 
