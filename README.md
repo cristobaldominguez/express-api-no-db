@@ -19,6 +19,7 @@ Campos obligatorios:
   lastName (string, Apellido del usuario),
   email (string, Email del usuario),
   password (string, Constraseña del usuario)
+  password_confirm (string, Constraseña del usuario)
 }
 ```
 
